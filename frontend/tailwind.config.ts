@@ -6,6 +6,17 @@ const config: Config = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    // Project color gradients
+    'from-blue-500',
+    'to-cyan-400',
+    'from-purple-500',
+    'to-pink-500',
+    'from-orange-500',
+    'to-red-500',
+    'from-emerald-500',
+    'to-teal-500',
+  ],
   theme: {
     extend: {
       fontFamily: {

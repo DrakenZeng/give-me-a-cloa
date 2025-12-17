@@ -14,6 +14,8 @@ export function useZetaTipRouter(chainId?: number) {
   // 获取合约地址
   const getContractAddress = () => {
     switch (currentChainId) {
+      case CHAIN_IDS.localhost:
+        return CONTRACT_ADDRESSES.localhost.ZetaTipRouter;
       case CHAIN_IDS.sepolia:
         return CONTRACT_ADDRESSES.sepolia.ZetaTipRouter;
       case CHAIN_IDS.bscTestnet:
@@ -23,7 +25,7 @@ export function useZetaTipRouter(chainId?: number) {
       case CHAIN_IDS.bsc:
         return CONTRACT_ADDRESSES.bsc.ZetaTipRouter;
       default:
-        return CONTRACT_ADDRESSES.sepolia.ZetaTipRouter;
+        return CONTRACT_ADDRESSES.localhost.ZetaTipRouter;
     }
   };
 

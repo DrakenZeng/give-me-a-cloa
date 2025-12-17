@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 import { parseUnits } from 'viem';
-import { useZetaTipRouter, useERC20Token, useFormatAmount } from '../../hooks/useContract';
-import { CONTRACT_ADDRESSES, CHAIN_IDS, CHAIN_NAMES, SUPPORTED_TOKENS, MIN_TIP_AMOUNT, MAX_TIP_AMOUNT } from '../../contracts/config';
+import { useZetaTipRouter, useERC20Token, useFormatAmount } from '../hooks/useContract';
+import { CONTRACT_ADDRESSES, CHAIN_IDS, CHAIN_NAMES, SUPPORTED_TOKENS, MIN_TIP_AMOUNT, MAX_TIP_AMOUNT } from '../contracts/config';
 
 export function TipModal() {
   const { address } = useAccount();

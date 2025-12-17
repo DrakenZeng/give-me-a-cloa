@@ -1,5 +1,11 @@
 // 合约地址配置
 export const CONTRACT_ADDRESSES = {
+  // 本地开发 (Anvil)
+  localhost: {
+    ZetaTipRouter: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+    USDC: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+    Gateway: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+  },
   // 测试网
   sepolia: {
     ZetaTipRouter: '0x0000000000000000000000000000000000000000', // TODO: 部署后填入
@@ -22,6 +28,7 @@ export const CONTRACT_ADDRESSES = {
 
 // 链 ID 映射
 export const CHAIN_IDS = {
+  localhost: 31337, // Anvil 默认 chainId
   sepolia: 11155111,
   bscTestnet: 97,
   mainnet: 1,
@@ -30,6 +37,7 @@ export const CHAIN_IDS = {
 
 // 链名称映射
 export const CHAIN_NAMES = {
+  [CHAIN_IDS.localhost]: 'Localhost',
   [CHAIN_IDS.sepolia]: 'Sepolia',
   [CHAIN_IDS.bscTestnet]: 'BSC Testnet',
   [CHAIN_IDS.mainnet]: 'Ethereum',
@@ -53,6 +61,7 @@ export const SUPPORTED_TOKENS = {
     name: 'USD Coin',
     decimals: 6,
     addresses: {
+      [CHAIN_IDS.localhost]: '0x5FbDB2315678afecb367f032d93F642f64180aa3',
       [CHAIN_IDS.sepolia]: '0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8',
       [CHAIN_IDS.bscTestnet]: '0x64544969ed7EBf5f083679233325356EbE738930',
       [CHAIN_IDS.mainnet]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
