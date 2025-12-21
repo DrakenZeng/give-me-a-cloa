@@ -97,7 +97,7 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
 
   const selectedToken = TOKENS.find(t => t.id === selectedTokenId) || TOKENS[0];
 
-  const { send, isPending, isConfirming, isSuccess, error, hash, configErrors } = useDemoEthTip();
+  const { send, isPending, isConfirming, isSuccess, error, hash, configErrors, isReady } = useDemoEthTip();
 
   // Reset amount to default preset when token changes
   useEffect(() => {
@@ -142,6 +142,10 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
   }, [isSuccess]);
 
   const handleBuy = () => {
+    if (!isReady) {
+      setLcdMessage('CONNECT WALLET');
+      return;
+    }
     if (status !== 'idle') return;
     if (selectedTokenId !== 'ETH') {
       setLcdMessage('DEMO: ETH ONLY');
@@ -347,28 +351,32 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
 
           {/* 4. Action Button & Coin Slot */}
           <div className="flex gap-4 items-stretch h-14">
-            <button
-              onClick={handleBuy}
-              disabled={status !== 'idle' || !amount}
-              className={`
-                        flex-1 rounded-xl font-black text-sm uppercase tracking-widest transition-all
-                        flex items-center justify-center gap-2 shadow-lg relative overflow-hidden group
-                        ${status === 'idle'
-                  ? `bg-gradient-to-br ${selectedToken.color} text-white hover:brightness-110 active:scale-95`
-                  : 'bg-zinc-800 text-zinc-600 cursor-not-allowed'}
+              <button
+                onClick={handleBuy}
+                disabled={status !== 'idle' || !amount || !isReady}
+                className={`
+                          flex-1 rounded-xl font-black text-sm uppercase tracking-widest transition-all
+                          flex items-center justify-center gap-2 shadow-lg relative overflow-hidden group
+                          ${status === 'idle' && isReady
+                    ? `bg-gradient-to-br ${selectedToken.color} text-white hover:brightness-110 active:scale-95`
+                    : 'bg-zinc-800 text-zinc-600 cursor-not-allowed'}
                     `}
-            >
-              {status === 'idle' ? (
-                <>
-                  <span className="relative z-10">PUSH</span>
-                  <ChevronRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-                  {/* Button Shine Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-                </>
-              ) : (
-                <span className="animate-pulse">WAIT</span>
-              )}
-            </button>
+              >
+                {status === 'idle' ? (
+                  isReady ? (
+                    <>
+                      <span className="relative z-10">PUSH</span>
+                      <ChevronRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
+                      {/* Button Shine Effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                    </>
+                  ) : (
+                    <span className="relative z-10">CONNECT</span>
+                  )
+                ) : (
+                  <span className="animate-pulse">WAIT</span>
+                )}
+              </button>
 
             {/* Coin Slot Visual */}
             <div className="w-12 bg-zinc-400 rounded-lg border-b-4 border-zinc-500 shadow-inner flex items-center justify-center relative overflow-hidden">

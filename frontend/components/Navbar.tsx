@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
-import { ConnectKitButton } from 'connectkit';
+import { WalletConnectButton } from './WalletConnectButton';
 
 interface NavbarProps {
   onNavigate?: (page: 'landing' | 'explore' | 'detail') => void;
@@ -54,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
         <div className="hidden md:flex items-center gap-8 text-sm font-medium text-zinc-400">
           <Link href="/" onClick={(e) => handleNavClick(e, 'landing')} className={getLinkClass('/')}>首页</Link>
           <Link href="/explore" onClick={(e) => handleNavClick(e, 'explore')} className={getLinkClass('/explore')}>探索项目</Link>
-          <ConnectKitButton />
+          <WalletConnectButton />
         </div>
 
         <button onClick={() => setIsOpen(!isOpen)} className="md:hidden text-white">
@@ -67,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate, currentPage }) => {
            <Link href="/" onClick={(e) => handleNavClick(e, 'landing')} className="text-left text-zinc-400 hover:text-white mb-4">首页</Link>
            <Link href="/explore" onClick={(e) => handleNavClick(e, 'explore')} className="text-left text-zinc-400 hover:text-white">探索项目</Link>
            <div className="mt-2">
-             <ConnectKitButton />
+             <WalletConnectButton className="w-full" />
            </div>
         </div>
       )}

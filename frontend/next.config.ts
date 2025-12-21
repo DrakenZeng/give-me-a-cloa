@@ -1,13 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  // Environment variables
   env: {
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   },
-  // Optimize for production
   reactStrictMode: true,
-  // Webpack compatibility (for libraries that need it)
+  turbopack: {},
   webpack: (config, { webpack }) => {
     config.plugins.push(
       new webpack.IgnorePlugin({

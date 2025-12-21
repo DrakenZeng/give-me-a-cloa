@@ -4,6 +4,7 @@ import React from 'react';
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConnectKitProvider } from 'connectkit';
+import { sepolia } from 'wagmi/chains';
 import { config } from '../config/wagmi';
 
 const queryClient = new QueryClient();
@@ -15,6 +16,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ConnectKitProvider
           theme="midnight"
           mode="dark"
+          options={{
+            initialChainId: sepolia.id,
+            enforceSupportedChains: true,
+          }}
         >
           {children}
         </ConnectKitProvider>
