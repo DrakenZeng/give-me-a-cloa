@@ -7,10 +7,15 @@ const nextConfig: NextConfig = {
   },
   // Optimize for production
   reactStrictMode: true,
-  // Turbopack configuration (empty object to silence warning)
-  turbopack: {},
   // Webpack compatibility (for libraries that need it)
-  webpack: (config) => {
+  webpack: (config, { webpack }) => {
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp:
+          /^(@metamask\/sdk(\/.*)?|@gemini-wallet\/core(\/.*)?|@base-org\/account(\/.*)?|porto(\/.*)?)$/,
+      })
+    );
+
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,

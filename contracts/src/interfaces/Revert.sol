@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.20;
+pragma solidity ^0.8.20;
 
 // Maximum allowed gas limit for revert operations.
 uint256 constant MAX_REVERT_GAS_LIMIT = 2_000_000;

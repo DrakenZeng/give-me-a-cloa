@@ -55,5 +55,4 @@ export const styles = {
   gradientOrb: "absolute rounded-full mix-blend-screen filter blur-[100px] opacity-40 animate-pulse-slow",
   glassCard: "bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-300 shadow-xl group cursor-pointer hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10",
   heading: "font-bold tracking-tighter text-white",
-  vendingMachine: "bg-zinc-900 border border-zinc-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden",
 };

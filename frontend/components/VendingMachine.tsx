@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Settings, Info } from 'lucide-react';
 import { Project } from '../types';
+import { useDemoEthTip } from '../hooks/useDemoEthTip';
 
 interface VendingMachineProps {
   project: Project;
@@ -96,6 +97,8 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
 
   const selectedToken = TOKENS.find(t => t.id === selectedTokenId) || TOKENS[0];
 
+  const { send, isPending, isConfirming, isSuccess, error, hash, configErrors } = useDemoEthTip();
+
   // Reset amount to default preset when token changes
   useEffect(() => {
     if (!isCustomAmount) {
@@ -107,11 +110,11 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     if (status === 'idle') {
-      setLcdMessage(`1 ${selectedToken.id} = 1 COLA`);
+      setLcdMessage(`DEMO: SEPOLIA → BASE`);
     } else if (status === 'inserting') {
       setLcdMessage('INSERTING...');
     } else if (status === 'processing') {
-      setLcdMessage('VERIFYING...');
+      setLcdMessage('TX PENDING...');
       setShake(true);
       timeout = setTimeout(() => setShake(false), 500);
     } else if (status === 'dispensing') {
@@ -122,21 +125,41 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
     return () => clearTimeout(timeout);
   }, [status, selectedToken]);
 
-  const handleBuy = () => {
-    if (!amount || parseFloat(amount) <= 0 || status !== 'idle') return;
-
-    setStatus('inserting');
-
-    // Animation timeline
-    setTimeout(() => setStatus('processing'), 1200);
-    setTimeout(() => setStatus('dispensing'), 3500);
-    setTimeout(() => {
-      setStatus('completed');
-      if (onBuy) onBuy();
-    }, 4500);
-    setTimeout(() => {
+  useEffect(() => {
+    if (error) {
       setStatus('idle');
-    }, 8000);
+      setLcdMessage('TX FAILED');
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setStatus('completed');
+      setLcdMessage('SUCCESS');
+      const t = setTimeout(() => setStatus('idle'), 6000);
+      return () => clearTimeout(t);
+    }
+  }, [isSuccess]);
+
+  const handleBuy = () => {
+    if (status !== 'idle') return;
+    if (selectedTokenId !== 'ETH') {
+      setLcdMessage('DEMO: ETH ONLY');
+      return;
+    }
+    if (amount !== '0.005') {
+      setAmount('0.005');
+      setIsCustomAmount(false);
+    }
+    if (configErrors.length) {
+      setLcdMessage('CONFIG MISSING');
+      return;
+    }
+
+    setStatus('processing');
+    void send().then(() => {
+      if (onBuy) onBuy();
+    });
   };
 
   return (
@@ -229,8 +252,10 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
           <div className="bg-[#1c2e26] rounded-lg border-2 border-[#2d4a3e] p-2.5 h-16 flex flex-col justify-center relative overflow-hidden shadow-inner">
             <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.2)_50%,transparent_50%)] bg-[size:100%_4px] pointer-events-none opacity-50 z-10"></div>
             <div className="flex justify-between items-end relative z-0">
-              <span className="text-[#34d399] text-xs font-mono lcd-text opacity-70">AMT: {amount}</span>
-              <span className="text-[#34d399] text-[0.6rem] font-mono animate-pulse">{status === 'processing' ? 'TX PENDING' : 'ONLINE'}</span>
+              <span className="text-[#34d399] text-xs font-mono lcd-text opacity-70">AMT: 0.005 ETH</span>
+              <span className="text-[#34d399] text-[0.6rem] font-mono animate-pulse">
+                {isConfirming || isPending ? 'TX PENDING' : 'ONLINE'}
+              </span>
             </div>
             <div className="text-[#4ade80] font-bold font-mono text-lg tracking-wider truncate mt-1 drop-shadow-[0_0_5px_rgba(74,222,128,0.5)]">
               {'>'} {lcdMessage}
@@ -266,6 +291,18 @@ export const VendingMachine: React.FC<VendingMachineProps> = ({ project, onBuy }
               </button>
             ))}
           </div>
+
+          {configErrors.length > 0 && (
+            <div className="text-xs text-amber-400 bg-amber-500/10 border border-amber-500/20 rounded-lg p-3">
+              Missing env: {configErrors.join(', ')}
+            </div>
+          )}
+
+          {hash && (
+            <div className="text-[10px] text-zinc-500 font-mono break-all">
+              tx: {hash}
+            </div>
+          )}
 
           {/* 3. Amounts & Input */}
           <div className="flex flex-col gap-3">

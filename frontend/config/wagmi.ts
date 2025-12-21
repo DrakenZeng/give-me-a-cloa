@@ -27,7 +27,8 @@ export const config = createConfig({
     coinbaseWallet({ appName: 'Give Me A Cola' }),
     // WalletConnect 暂时禁用（需要有效的 Project ID）
     // 如需启用，请在 .env.local 中设置 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID
-    ...(projectId && projectId !== 'demo-project-id' ? [
+    // Only initialize WalletConnect on client-side to avoid indexedDB SSR errors
+    ...(typeof window !== 'undefined' && projectId && projectId !== 'demo-project-id' ? [
       walletConnect({
         projectId,
         showQrModal: false,

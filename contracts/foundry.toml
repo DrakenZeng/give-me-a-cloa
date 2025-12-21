@@ -1,11 +1,17 @@
 [profile.default]
 src = "src"
 out = "out"
-libs = ["lib"]
-solc_version = "0.8.20"
+libs = ["lib", "../../../swap/node_modules", "../../../swap/dependencies"]
+solc_version = "0.8.26"
 optimizer = true
 optimizer_runs = 200
 via_ir = true
+remappings = [
+  "forge-std/=../../../swap/dependencies/forge-std-1.9.7/src/",
+  "@zetachain/toolkit/=../../../swap/node_modules/@zetachain/toolkit/",
+  "@zetachain/protocol-contracts/=../../../swap/node_modules/@zetachain/protocol-contracts/",
+  "@uniswap/=../../../swap/node_modules/@uniswap/",
+]
 
 [rpc_endpoints]
 sepolia = "${SEPOLIA_RPC_URL}"

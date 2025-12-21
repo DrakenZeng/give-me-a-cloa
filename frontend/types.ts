@@ -10,7 +10,3 @@ export interface Project {
   content: string;
   color: string;
 }
-
-export interface NavigationProps {
-  onNavigate: (page: 'landing' | 'explore' | 'detail') => void;
-}
