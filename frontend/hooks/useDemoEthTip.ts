@@ -1,7 +1,7 @@
 'use client';
 
 import { encodeAbiParameters, isAddress, parseAbiParameters, parseEther } from 'viem';
-import { useAccount, useChainId, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import { useConnection, useChainId, useSwitchChain, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { CONTRACT_ADDRESSES, CHAIN_IDS } from '../contracts/config';
 import { DEMO_TIP, validateDemoTipConfig } from '../contracts/demo';
 import { gatewayEvmAbi } from '../contracts/gatewayEvmAbi';
@@ -9,7 +9,7 @@ import { gatewayEvmAbi } from '../contracts/gatewayEvmAbi';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000' as const;
 
 export function useDemoEthTip() {
-  const { address } = useAccount();
+  const { address } = useConnection();
   const chainId = useChainId();
   const { switchChainAsync } = useSwitchChain();
 
